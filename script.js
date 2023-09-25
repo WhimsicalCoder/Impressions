@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const currentSpendDisplay = document.getElementById("current-spend-display");
     const currentImpressionsDisplay = document.getElementById("current-impressions-display");
     const spendPacing = document.getElementById("spend-pacing");
-    const impressionPacing = document.getElementById("impression-pacing");
     const budgetPacing = document.getElementById("budget-pacing");
 
     addCampaignButton.addEventListener("click", function () {
@@ -51,18 +50,11 @@ document.addEventListener("DOMContentLoaded", function () {
             current_impressions,
             booked_impressions,
             booked_cpm,
-            start_date,
-            end_date,
         } = campaigns[selectedCampaign];
-
-        const daysElapsed = Math.floor((new Date() - start_date) / (1000 * 60 * 60 * 24));
-        const expectedSpend = daysElapsed * booked_cpm;
-        const expectedImpressions = (daysElapsed * booked_impressions) / ((end_date - start_date) / (1000 * 60 * 60 * 24)).toFixed(0);
 
         currentSpendDisplay.textContent = current_spend.toFixed(2);
         currentImpressionsDisplay.textContent = current_impressions;
-        spendPacing.textContent = ((current_spend / expectedSpend) * 100).toFixed(2) + "%";
-        impressionPacing.textContent = ((current_impressions / expectedImpressions) * 100).toFixed(2) + "%";
+        spendPacing.textContent = ((current_spend / (current_impressions / booked_impressions * booked_cpm)) * 100).toFixed(2) + "%";
 
         // Calculate budget pacing
         const remainingBudget = (booked_impressions - current_impressions) * booked_cpm;
