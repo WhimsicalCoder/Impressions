@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ad Campaign Pacing Tool</title>
+</head>
+<body>
+    <h1>Ad Campaign Pacing Tool</h1>
+
+    <form id="pacing-form">
+        <label for="campaign_name">Campaign Name:</label>
+        <input type="text" id="campaign_name" required>
+
+        <label for="start_date">Start Date (YYYY-MM-DD):</label>
+        <input type="date" id="start_date" required>
+
+        <label for="end_date">End Date (YYYY-MM-DD):</label>
+        <input type="date" id="end_date" required>
+
+        <label for="booked_impressions">Booked Impressions:</label>
+        <input type="number" id="booked_impressions" required>
+
+        <label for="total_budget">Total Budget ($):</label>
+        <input type="number" id="total_budget" required>
+
+        <input type="button" value="Add Campaign" onclick="addCampaign()">
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Campaign Name</th>
+                <th>Total Budget</th>
+                <th>Budget Pacing (%)</th>
+                <th>Impression Pacing (%)</th>
+                <th>Current Spend</th>
+                <th>Current Impressions</th>
+                <th>Update</th>
+            </tr>
+        </thead>
+        <tbody id="campaign-data">
+        </tbody>
+    </table>
+
+    <script>
+        function addCampaign() {
+            const campaignName = document.getElementById("campaign_name").value;
+            const totalBudget = parseFloat(document.getElementById("total_budget").value);
+
+            // Create a new row
+            const newRow = document.createElement("tr");
+            newRow.innerHTML = `
+                <td>${campaignName}</td>
+                <td>$${totalBudget}</td>
+                <td class="budget-pacing"></td>
+                <td class="impression-pacing"></td>
+                <td><input type="number" class="current-spend" required></td>
+                <td><input type="number" class="current-impressions" required></td>
+                <td><button onclick="updatePacing(this)">Update</button></td>
+            `;
+
+            // Add the row to the table
+            document.getElementById("campaign-data").appendChild(newRow);
+        }
+
+        function updatePacing(button) {
+            const row = button.parentNode.parentNode;
+            const currentSpend = parseFloat(row.querySelector(".current-spend").value);
+            const currentImpressions = parseFloat(row.querySelector(".current-impressions").value);
+            const totalBudget = parseFloat(row.querySelector("td:nth-child(2)").textContent.slice(1));
+
+            const remainingBudget = totalBudget - currentSpend;
+            const budgetPacing = ((remainingBudget / totalBudget) * 100).toFixed(2);
+            const impressionPacing = ((currentImpressions / currentSpend) * 100).toFixed(2);
+
+            row.querySelector(".budget-pacing").textContent = budgetPacing + "%";
+            row.querySelector(".impression-pacing").textContent = impressionPacing + "%";
+        }
+    </script>
+</body>
+</html>
