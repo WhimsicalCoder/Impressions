@@ -62,7 +62,7 @@
         function addCampaign() {
             const campaignName = document.getElementById("campaign_name").value;
             const totalBudget = parseFloat(document.getElementById("total_budget").value);
-            const today = new Date().toISOString().split('T')[0]; // Get today's date
+            const today = getCurrentDate(); // Get today's date
 
             // Create a new row
             const newRow = document.createElement("tr");
@@ -95,9 +95,24 @@
             row.querySelector(".impression-pacing").textContent = impressionPacing + "%";
 
             // Update today's date
-            const today = new Date().toISOString().split('T')[0];
-            row.querySelector("td:nth-child(7)").textContent = today;
+            row.querySelector("td:nth-child(7)").textContent = getCurrentDate();
         }
+
+        function getCurrentDate() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // Auto-update the date daily
+        setInterval(() => {
+            const rows = document.querySelectorAll("#campaign-data tr");
+            for (const row of rows) {
+                row.querySelector("td:nth-child(7)").textContent = getCurrentDate();
+            }
+        }, 86400000); // 24 hours
     </script>
 </body>
 </html>
