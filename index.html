@@ -3,51 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="styles.css">
-    <title>Ad Campaign Pacing Tool</title>
+    <title>Out-of-Home Campaign Pacing Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #results {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Ad Campaign Pacing Tool</h1>
-        
-        <div id="campaign-form" class="form">
-            <h2>Add Campaign</h2>
-            <label for="campaign-name">Campaign Name:</label>
-            <input type="text" id="campaign-name" required>
-            <label for="start-date">Start Date:</label>
-            <input type="date" id="start-date" required>
-            <label for="end-date">End Date:</label>
-            <input type="date" id="end-date" required>
-            <label for="booked-impressions">Booked Impressions:</label>
-            <input type="number" id="booked-impressions" required>
-            <label for="booked-cpm">Booked CPM:</label>
-            <input type="number" id="booked-cpm" required>
-            <button id="add-campaign-btn">Add Campaign</button>
-        </div>
-        
-        <div id="update-form" class="form">
-            <h2>Update Campaign</h2>
-            <label for="select-campaign">Select a Campaign:</label>
-            <select id="select-campaign" required></select>
-            <label for="current-spend">Current Spend:</label>
-            <input type="number" id="current-spend" required>
-            <label for="current-impressions">Current Impressions:</label>
-            <input type="number" id="current-impressions" required>
-            <button id="update-campaign-btn">Update Campaign</button>
-        </div>
-        
-        <div id="view-pacing" class="form">
-            <h2>View Campaign Pacing</h2>
-            <label for="view-campaign">Select a Campaign:</label>
-            <select id="view-campaign" required></select>
-            <div id="pacing-results">
-                <p>Current Spend: $<span id="current-spend-display">0.00</span></p>
-                <p>Current Impressions: <span id="current-impressions-display">0</span></p>
-                <p>Spend Pacing: <span id="spend-pacing">0.00%</span></p>
-            </div>
-        </div>
+
+    <h2>Out-of-Home Campaign Pacing Tool</h2>
+
+    <label for="campaignName">Campaign Name:</label>
+    <input type="text" id="campaignName" placeholder="Enter campaign name">
+
+    <label for="startDate">Start Date:</label>
+    <input type="date" id="startDate" placeholder="Select start date">
+
+    <label for="endDate">End Date:</label>
+    <input type="date" id="endDate" placeholder="Select end date">
+
+    <label for="totalBudget">Total Budget ($):</label>
+    <input type="number" id="totalBudget" placeholder="Enter total budget">
+
+    <label for="bookedCPM">Booked CPM ($):</label>
+    <input type="number" id="bookedCPM" placeholder="Enter booked CPM">
+
+    <button onclick="calculatePacing()">Calculate Pacing</button>
+
+    <div id="results">
+        <h3>Pacing Results:</h3>
+        <p id="dailyBudget">Daily Budget: </p>
+        <p id="bookedImpressionsTarget">Booked Impressions Target: </p>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        function calculatePacing() {
+            var campaignName = document.getElementById('campaignName').value;
+            var startDate = new Date(document.getElementById('startDate').value);
+            var endDate = new Date(document.getElementById('endDate').value);
+            var totalBudget = parseFloat(document.getElementById('totalBudget').value);
+            var bookedCPM = parseFloat(document.getElementById('bookedCPM').value);
+
+            // Calculate pacing
+            var totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+            var dailyBudget = totalBudget / totalDays;
+            var bookedImpressionsTarget = (totalBudget / bookedCPM) * 1000; // CPM to impressions conversion
+
+            // Display results
+            document.getElementById('dailyBudget').innerText = 'Daily Budget: $' + dailyBudget.toFixed(2);
+            document.getElementById('bookedImpressionsTarget').innerText = 'Booked Impressions Target: ' + bookedImpressionsTarget.toFixed(0);
+        }
+    </script>
+
 </body>
 </html>
