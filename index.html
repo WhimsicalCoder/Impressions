@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Out-of-Home Campaign Pacing Tool</title>
+    <title>Out-of-Home Daily Pacing Tool</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -37,7 +37,7 @@
 </head>
 <body>
 
-    <h2>Out-of-Home Campaign Pacing Tool</h2>
+    <h2>Out-of-Home Daily Pacing Tool</h2>
 
     <label for="campaignName">Campaign Name:</label>
     <input type="text" id="campaignName" placeholder="Enter campaign name">
@@ -51,33 +51,33 @@
     <label for="totalBudget">Total Budget ($):</label>
     <input type="number" id="totalBudget" placeholder="Enter total budget">
 
-    <label for="bookedCPM">Booked CPM ($):</label>
-    <input type="number" id="bookedCPM" placeholder="Enter booked CPM">
+    <label for="bookedImpressionsGoal">Booked Impressions Goal:</label>
+    <input type="number" id="bookedImpressionsGoal" placeholder="Enter booked impressions goal">
 
-    <button onclick="calculatePacing()">Calculate Pacing</button>
+    <button onclick="calculateDailyPacing()">Calculate Daily Pacing</button>
 
     <div id="results">
-        <h3>Pacing Results:</h3>
+        <h3>Daily Pacing Results:</h3>
         <p id="dailyBudget">Daily Budget: </p>
-        <p id="bookedImpressionsTarget">Booked Impressions Target: </p>
+        <p id="dailyImpressions">Daily Impressions: </p>
     </div>
 
     <script>
-        function calculatePacing() {
+        function calculateDailyPacing() {
             var campaignName = document.getElementById('campaignName').value;
             var startDate = new Date(document.getElementById('startDate').value);
             var endDate = new Date(document.getElementById('endDate').value);
             var totalBudget = parseFloat(document.getElementById('totalBudget').value);
-            var bookedCPM = parseFloat(document.getElementById('bookedCPM').value);
+            var bookedImpressionsGoal = parseInt(document.getElementById('bookedImpressionsGoal').value);
 
             // Calculate pacing
             var totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
             var dailyBudget = totalBudget / totalDays;
-            var bookedImpressionsTarget = (totalBudget / bookedCPM) * 1000; // CPM to impressions conversion
+            var dailyImpressions = bookedImpressionsGoal / totalDays;
 
             // Display results
             document.getElementById('dailyBudget').innerText = 'Daily Budget: $' + dailyBudget.toFixed(2);
-            document.getElementById('bookedImpressionsTarget').innerText = 'Booked Impressions Target: ' + bookedImpressionsTarget.toFixed(0);
+            document.getElementById('dailyImpressions').innerText = 'Daily Impressions: ' + dailyImpressions.toFixed(0);
         }
     </script>
 
