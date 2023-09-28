@@ -6,13 +6,13 @@ The Out-of-Home Daily Pacing Tool is a web tool designed to calculate the daily 
 
 # Usage
 
-# Campaign Name: Enter the name of your advertising campaign.
-# Start Date: Select the start date of your campaign.
-# End Date: Select the end date of your campaign.
-# Total Budget ($): Enter the total budget allocated for the campaign.
-# Booked Impressions Goal: Enter the total number of impressions you aim to achieve during the entire campaign.
-# Cost Per Mile (CPM $): Enter the cost per mile, which is the cost for 1,000 impressions.
-# Calculate Daily Pacing: Click the button to calculate the daily impressions and daily budget required.
+Campaign Name: Enter the name of your advertising campaign.
+Start Date: Select the start date of your campaign.
+End Date: Select the end date of your campaign.
+Total Budget ($): Enter the total budget allocated for the campaign.
+Booked Impressions Goal: Enter the total number of impressions you aim to achieve during the entire campaign.
+Cost Per Mile (CPM $): Enter the cost per mile, which is the cost for 1,000 impressions.
+Calculate Daily Pacing: Click the button to calculate the daily impressions and daily budget required.
 
 # Equation
 The tool uses the following equation to calculate the daily impressions and daily budget:
