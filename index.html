@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Impressions Calculator</title>
+    <title>Ad Campaign Tools</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -28,7 +28,7 @@
             cursor: pointer;
         }
 
-        #result {
+        #impressionsResult, #budgetResult {
             margin-top: 20px;
             font-weight: bold;
         }
@@ -36,27 +36,55 @@
 </head>
 <body>
     <div class="container">
-        <h2>Impressions Calculator</h2>
+        <h2>Ad Campaign Tools</h2>
+        <h3>Calculate Impressions</h3>
         <label for="cpm">CPM ($):</label>
-        <input type="number" id="cpm" required>
-        <label for="budget">Budget ($):</label>
-        <input type="number" id="budget" required>
+        <input type="number" id="cpmImpressions" required>
+        <label for="budgetImpressions">Budget ($):</label>
+        <input type="number" id="budgetImpressions" required>
         <button type="button" onclick="calculateImpressions()">Calculate Impressions</button>
-        <div id="result"></div>
+        <div id="impressionsResult"></div>
+
+        <h3>Calculate Budget & Impressions for Even Pacing</h3>
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" required>
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" required>
+        <label for="totalImpressions">Total Impressions:</label>
+        <input type="number" id="totalImpressions" required>
+        <button type="button" onclick="calculateBudgetAndImpressions()">Calculate Budget & Impressions</button>
+        <div id="budgetResult"></div>
     </div>
 
     <script>
         function calculateImpressions() {
-            const cpm = parseFloat(document.getElementById('cpm').value);
-            const budget = parseFloat(document.getElementById('budget').value);
+            const cpmImpressions = parseFloat(document.getElementById('cpmImpressions').value);
+            const budgetImpressions = parseFloat(document.getElementById('budgetImpressions').value);
 
-            if (isNaN(cpm) || isNaN(budget) || cpm <= 0 || budget <= 0) {
-                document.getElementById('result').innerHTML = 'Please enter valid CPM and budget.';
+            if (isNaN(cpmImpressions) || isNaN(budgetImpressions) || cpmImpressions <= 0 || budgetImpressions <= 0) {
+                document.getElementById('impressionsResult').innerHTML = 'Please enter valid CPM and budget.';
                 return;
             }
 
-            const impressions = (budget / cpm) * 1000;
-            document.getElementById('result').innerHTML = `You will get approximately ${impressions.toFixed(0)} impressions.`;
+            const impressions = (budgetImpressions / cpmImpressions) * 1000;
+            document.getElementById('impressionsResult').innerHTML = `You will get approximately ${impressions.toFixed(0)} impressions.`;
+        }
+
+        function calculateBudgetAndImpressions() {
+            const startDate = new Date(document.getElementById('startDate').value);
+            const endDate = new Date(document.getElementById('endDate').value);
+            const totalImpressions = parseFloat(document.getElementById('totalImpressions').value);
+
+            if (isNaN(totalImpressions) || totalImpressions <= 0 || startDate >= endDate) {
+                document.getElementById('budgetResult').innerHTML = 'Please enter valid values.';
+                return;
+            }
+
+            const daysRemaining = (endDate - startDate) / (1000 * 60 * 60 * 24);
+            const budget = (totalImpressions / 1000) * daysRemaining;
+            const impressions = (budget / daysRemaining) * 1000;
+
+            document.getElementById('budgetResult').innerHTML = `To pace evenly, you need a budget of approximately $${budget.toFixed(2)} and ${impressions.toFixed(0)} impressions.`;
         }
     </script>
 </body>
