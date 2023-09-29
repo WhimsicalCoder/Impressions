@@ -1,89 +1,91 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DBI Target Tool</title>
+    <title>Ad Campaign Tools</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
         }
 
-        label {
-            display: block;
-            margin-bottom: 5px;
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
         }
 
-        input, select {
+        input[type="number"] {
             width: 100%;
-            padding: 8px;
-            margin-bottom: 15px;
+            padding: 10px;
+            margin: 10px 0;
         }
 
         button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 15px;
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
             border: none;
-            border-radius: 5px;
             cursor: pointer;
         }
 
-        #results {
+        #impressionsResult, #budgetResult {
             margin-top: 20px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
+    <div class="container">
+        <h2>Ad Campaign Tools</h2>
+        <h3>Calculate Impressions</h3>
+        <label for="cpm">CPM ($):</label>
+        <input type="number" id="cpmImpressions" required>
+        <label for="budgetImpressions">Budget ($):</label>
+        <input type="number" id="budgetImpressions" required>
+        <button type="button" onclick="calculateImpressions()">Calculate Impressions</button>
+        <div id="impressionsResult"></div>
 
-    <h2>DBI Target Tool</h2>
-
-    <label for="campaignName">Campaign Name:</label>
-    <input type="text" id="campaignName" placeholder="Enter campaign name">
-
-    <label for="startDate">Start Date:</label>
-    <input type="date" id="startDate" placeholder="Select start date">
-
-    <label for="endDate">End Date:</label>
-    <input type="date" id="endDate" placeholder="Select end date">
-
-    <label for="totalBudget">Total Budget ($):</label>
-    <input type="number" id="totalBudget" placeholder="Enter total budget">
-
-    <label for="bookedImpressionsGoal">Booked Impressions Goal:</label>
-    <input type="number" id="bookedImpressionsGoal" placeholder="Enter booked impressions goal">
-
-    <label for="cpm">Cost Per Mile (CPM $):</label>
-    <input type="number" id="cpm" placeholder="Enter Cost Per Mile (CPM)">
-
-    <button onclick="calculateDailyPacing()">Calculate Daily Pacing</button>
-
-    <div id="results">
-        <h3>DBI Results:</h3>
-        <p id="dailyImpressions">Daily Impressions Needed: </p>
-        <p id="dailyBudget">Daily Budget Required: </p>
+        <h3>Calculate Budget & Impressions for Even Pacing</h3>
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" required>
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" required>
+        <label for="totalImpressions">Total Impressions:</label>
+        <input type="number" id="totalImpressions" required>
+        <button type="button" onclick="calculateBudgetAndImpressions()">Calculate Budget & Impressions</button>
+        <div id="budgetResult"></div>
     </div>
 
     <script>
-        function calculateDailyPacing() {
-            var campaignName = document.getElementById('campaignName').value;
-            var startDate = new Date(document.getElementById('startDate').value);
-            var endDate = new Date(document.getElementById('endDate').value);
-            var totalBudget = parseFloat(document.getElementById('totalBudget').value);
-            var bookedImpressionsGoal = parseInt(document.getElementById('bookedImpressionsGoal').value);
-            var cpm = parseFloat(document.getElementById('cpm').value);
+        function calculateImpressions() {
+            const cpmImpressions = parseFloat(document.getElementById('cpmImpressions').value);
+            const budgetImpressions = parseFloat(document.getElementById('budgetImpressions').value);
 
-            // Calculate pacing
-            var totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
-            var dailyImpressions = bookedImpressionsGoal / totalDays;
-            var dailyBudgetRequired = (dailyImpressions * cpm) * totalDays / 1000; // CPM to impressions conversion
+            if (isNaN(cpmImpressions) || isNaN(budgetImpressions) || cpmImpressions <= 0 || budgetImpressions <= 0) {
+                document.getElementById('impressionsResult').innerHTML = 'Please enter valid CPM and budget.';
+                return;
+            }
 
-            // Display results
-            document.getElementById('dailyImpressions').innerText = 'Daily Impressions Needed: ' + dailyImpressions.toFixed(0);
-            document.getElementById('dailyBudget').innerText = 'Daily Budget Required: $' + dailyBudgetRequired.toFixed(2);
+            const impressions = (budgetImpressions / cpmImpressions) * 1000;
+            document.getElementById('impressionsResult').innerHTML = `You will get approximately ${impressions.toFixed(0)} impressions.`;
+        }
+
+        function calculateBudgetAndImpressions() {
+            const startDate = new Date(document.getElementById('startDate').value);
+            const endDate = new Date(document.getElementById('endDate').value);
+            const totalImpressions = parseFloat(document.getElementById('totalImpressions').value);
+
+            if (isNaN(totalImpressions) || totalImpressions <= 0 || startDate >= endDate) {
+                document.getElementById('budgetResult').innerHTML = 'Please enter valid values.';
+                return;
+            }
+
+            const daysRemaining = (endDate - startDate) / (1000 * 60 * 60 * 24);
+            const budget = (totalImpressions / 1000) * daysRemaining;
+            const impressions = (budget / daysRemaining) * 1000;
+
+            document.getElementById('budgetResult').innerHTML = `To pace evenly, you need a budget of approximately $${budget.toFixed(2)} and ${impressions.toFixed(0)} impressions.`;
         }
     </script>
-
 </body>
 </html>
